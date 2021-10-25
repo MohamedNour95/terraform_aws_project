@@ -1,0 +1,24 @@
+properties([parameters([choice(choices: ['dev', 'prod'], description: 'select an environment to build ', name: 'env')])])
+pipeline {
+    agent any
+
+    stages {
+        stage('Preparation') {
+            steps {
+                
+                git 'https://github.com/MohamedNour95/terraform_aws_project.git/'
+            }
+        }
+        stage('Deployment') {
+            steps {
+                
+                sh """ 
+                terraform init
+                terraform apply -auto-approve --var-file ${params.env}.tfvars
+                """ 
+                
+                
+            }
+        }    
+    }
+}
